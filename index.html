@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+</head>
+
+<body>
+    <div id="container">
+        <div class="display">
+            <input type="text" id="result" placeholder="0" class="display" disabled>
+        </div>
+        <div class="buttons">
+            <button class="btn" id="btn-7">7</button>
+            <button class="btn" id="btn-8">8</button>
+            <button class="btn" id="btn-9">9</button>
+            <button class="btn" id="btn-div">/</button>
+            <button class="btn" id="btn-4">4</button>
+            <button class="btn" id="btn-5">5</button>
+            <button class="btn" id="btn-6">6</button>
+            <button class="btn" id="btn-mul">*</button>
+            <button class="btn" id="btn-1">1</button>
+            <button class="btn" id="btn-2">2</button>
+            <button class="btn" id="btn-3">3</button>
+            <button class="btn" id="btn-sub">-</button>
+            <button class="btn" id="btn-0">0</button>
+            <button class="btn" id="btn-dot">.</button>
+            <button class="btn" id="btn-eq">=</button>
+            <button class="btn" id="btn-add">+</button>
+        </div>
+
+    </div>
+
+</body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        height: 100vh;
+        align-items: flex-start;
+
+        background-color: #c93f3f;
+    }
+
+    #result {
+        width: 100%;
+        height: 50px;
+        border: none;
+        border-radius: 7px;
+        padding: 10px;
+        font-size: 30px;
+        text-align: right;
+    }
+
+    #container {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        border-radius: 15px;
+        align-items: center;
+        margin-top: 100px;
+        width: 400px;
+        height: 500px;
+        background-color: #000;
+    }
+
+    .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        height: 90%;
+        width: 90%;
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    .btn {
+        border: none;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        font-size: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        transition: all 1s ease-out;
+    }
+
+    .btn:hover {
+        scale: 1.1;
+    }
+
+    #btn-7:hover {
+        background-color: #ff6b6b;
+        color: #fff;
+    }
+
+    #btn-8:hover {
+        background-color: #ff9f43;
+        color: #fff;
+    }
+
+    #btn-9:hover {
+        background-color: #ffd93d;
+        color: #333;
+    }
+
+    #btn-div:hover {
+        background-color: #6bcbff;
+        color: #fff;
+    }
+
+    #btn-4:hover {
+        background-color: #a29bfe;
+        color: #fff;
+    }
+
+    #btn-5:hover {
+        background-color: #fd79a8;
+        color: #fff;
+    }
+
+    #btn-6:hover {
+        background-color: #00cec9;
+        color: #fff;
+    }
+
+    #btn-mul:hover {
+        background-color: #e17055;
+        color: #fff;
+    }
+
+    #btn-1:hover {
+        background-color: #55efc4;
+        color: #333;
+    }
+
+    #btn-2:hover {
+        background-color: #74b9ff;
+        color: #fff;
+    }
+
+    #btn-3:hover {
+        background-color: #fab1d3;
+        color: #333;
+    }
+
+    #btn-sub:hover {
+        background-color: #b8e994;
+        color: #333;
+    }
+
+    #btn-0:hover {
+        background-color: #d63031;
+        color: #fff;
+    }
+
+    #btn-dot:hover {
+        background-color: #fdcb6e;
+        color: #333;
+    }
+
+    #btn-eq:hover {
+        background-color: #6c5ce7;
+        color: #fff;
+    }
+
+    #btn-add:hover {
+        background-color: #00b894;
+        color: #fff;
+    }
+
+    .btn:active {
+        transform: translateY(5px);
+
+    }
+</style>
+
+</html>
