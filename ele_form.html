@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Form Elements</title>
+</head>
+
+<body>
+
+    <h1> Form Elements</h1>
+
+    <form action="#" method="post" enctype="multipart/form-data">
+
+        <!-- Group 1: Basic Text & Input Types -->
+        <fieldset>
+            <legend>Personal & Contact Information</legend>
+
+            <p>
+                <label for="username">Text Input:</label><br>
+                <input type="text" id="username" name="username" placeholder="Enter username">
+            </p>
+
+            <p>
+                <label for="pwd">Password Input:</label><br>
+                <input type="password" id="pwd" name="password">
+            </p>
+
+            <p>
+                <label for="email">Email Input:</label><br>
+                <input type="email" id="email" name="email" placeholder="user@example.com">
+            </p>
+
+            <p>
+                <label for="phone">Telephone Input:</label><br>
+                <input type="tel" id="phone" name="phone" placeholder="123-456-7890">
+            </p>
+
+            <p>
+                <label for="website">URL Input:</label><br>
+                <input type="url" id="website" name="website" placeholder="https://example.com">
+            </p>
+
+            <p>
+                <label for="age">Number Input:</label><br>
+                <input type="number" id="age" name="age" min="1" max="100" value="25">
+            </p>
+
+            <p>
+                <label for="search">Search Input:</label><br>
+                <input type="search" id="search" name="search" placeholder="Search keywords...">
+            </p>
+
+            <p>
+                <label for="dob">Date Input:</label><br>
+                <input type="date" id="dob" name="dob">
+            </p>
+
+            <p>
+                <label for="appointment">Date & Time Input:</label><br>
+                <input type="datetime-local" id="appointment" name="appointment">
+            </p>
+
+            <p>
+                <label for="time">Time Input:</label><br>
+                <input type="time" id="time" name="time">
+            </p>
+
+            <p>
+                <label for="month">Month Input:</label><br>
+                <input type="month" id="month" name="month">
+            </p>
+
+            <p>
+                <label for="week">Week Input:</label><br>
+                <input type="week" id="week" name="week">
+            </p>
+        </fieldset>
+
+        <br>
+
+        <!-- Group 2: Selection Controls -->
+        <fieldset>
+            <legend>Choices & Selections</legend>
+
+            <p>
+                <strong>Radio Buttons (Single Choice):</strong><br>
+                <input type="radio" id="gender-m" name="gender" value="male">
+                <label for="gender-m">Male</label>
+                <input type="radio" id="gender-f" name="gender" value="female">
+                <label for="gender-f">Female</label>
+                <input type="radio" id="gender-o" name="gender" value="other">
+                <label for="gender-o">Other</label>
+            </p>
+
+            <p>
+                <strong>Checkboxes (Multiple Choice):</strong><br>
+                <input type="checkbox" id="subscribe" name="subscribe" value="newsletter">
+                <label for="subscribe">Subscribe to Newsletter</label><br>
+                <input type="checkbox" id="terms" name="terms" value="accepted">
+                <label for="terms">Agree to Terms & Conditions</label>
+            </p>
+
+            <p>
+                <label for="country">Select Dropdown:</label><br>
+                <select id="country" name="country">
+                    <option value="">-- Choose Country --</option>
+                    <optgroup label="North America">
+                        <option value="us">United States</option>
+                        <option value="ca">Canada</option>
+                    </optgroup>
+                    <optgroup label="Europe">
+                        <option value="uk">United Kingdom</option>
+                        <option value="fr">France</option>
+                    </optgroup>
+                </select>
+            </p>
+
+            <p>
+                <label for="browser">Datalist (Input with Autocomplete Suggestions):</label><br>
+                <input list="browsers" id="browser" name="browser" placeholder="Type or select browser">
+                <datalist id="browsers">
+                    <option value="Chrome">
+                    <option value="Firefox">
+                    <option value="Safari">
+                    <option value="Edge">
+                    <option value="Opera">
+                </datalist>
+            </p>
+        </fieldset>
+
+        <br>
+
+        <!-- Group 3: File, Range, Color, & Text Area -->
+        <fieldset>
+            <legend>Files & Advanced Inputs</legend>
+
+            <p>
+                <label for="avatar">File Upload:</label><br>
+                <input type="file" id="avatar" name="avatar">
+            </p>
+
+            <p>
+                <label for="volume">Range Slider:</label><br>
+                <input type="range" id="volume" name="volume" min="0" max="100" value="50">
+            </p>
+
+            <p>
+                <label for="favcolor">Color Picker:</label><br>
+                <input type="color" id="favcolor" name="favcolor" value="#0080ff">
+            </p>
+
+            <p>
+                <label for="bio">Textarea (Multi-line Text):</label><br>
+                <textarea id="bio" name="bio" rows="4" cols="40" placeholder="Tell us about yourself..."></textarea>
+            </p>
+
+            <p>
+                <label for="hidden-field">Hidden Input (Not visible in UI):</label>
+                <input type="hidden" id="hidden-field" name="user_id" value="12345">
+            </p>
+        </fieldset>
+
+        <br>
+
+        <!-- Group 4: Buttons & Actions -->
+        <fieldset>
+            <legend>Form Actions & Controls</legend>
+
+            <p>
+                <input type="submit" value="Submit Form">
+                <input type="reset" value="Reset Form">
+                <button type="button" onclick="alert('Button Clicked!')">Generic Button</button>
+            </p>
+        </fieldset>
+
+    </form>
+
+</body>
+
+</html>
