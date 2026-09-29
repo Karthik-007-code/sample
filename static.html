@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --bg-color: #f8f9fa;
+            --container-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #6c757d;
+            --border-color: #e9ecef;
+            --hover-bg: #f1f3f5;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            margin-top: 0;
+            color: var(--text-main);
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-upload-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            height: 100%;
+            width: 100%;
+        }
+
+        .btn {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn:hover {
+            background-color: var(--hover-bg);
+            border-color: #ced4da;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #3b73b5;
+            border-color: #3b73b5;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            background-color: var(--container-bg);
+        }
+
+        th, td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--bg-color);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            user-select: none;
+            position: sticky;
+            top: 0;
+        }
+
+        th:hover {
+            background-color: var(--border-color);
+        }
+
+        th.sort-asc::after {
+            content: " \25B2";
+            font-size: 0.7em;
+        }
+
+        th.sort-desc::after {
+            content: " \25BC";
+            font-size: 0.7em;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: rgba(0, 0, 0, 0.015);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Data Viewer</h1>
+        <p>Upload an Excel file to view and sort its contents, or load sample data.</p>
+        
+        <div class="controls">
+            <div class="file-upload-wrapper">
+                <button class="btn btn-primary">Choose Excel File</button>
+                <input type="file" id="fileInput" accept=".xlsx, .xls, .csv">
+            </div>
+            <button class="btn" id="loadSampleBtn">Load Sample Data</button>
+            <span id="fileName" style="margin-left: 1rem; color: var(--text-muted); font-size: 0.9rem;"></span>
+        </div>
+
+        <div class="table-container" id="tableContainer">
+            <div class="empty-state">
+                No data to display. Please upload a file or load sample data.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = [];
+        let currentHeaders = [];
+        let sortCol = null;
+        let sortAsc = true;
+
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileName');
+        const tableContainer = document.getElementById('tableContainer');
+        const loadSampleBtn = document.getElementById('loadSampleBtn');
+
+        // Sample Data
+        const sampleData = [
+            { "ID": 1, "Name": "Alice Smith", "Department": "Engineering", "Role": "Developer", "Join Date": "2021-03-15", "Salary": 85000 },
+            { "ID": 2, "Name": "Bob Johnson", "Department": "Marketing", "Role": "Manager", "Join Date": "2019-11-01", "Salary": 92000 },
+            { "ID": 3, "Name": "Charlie Brown", "Department": "Sales", "Role": "Representative", "Join Date": "2022-06-20", "Salary": 65000 },
+            { "ID": 4, "Name": "Diana Prince", "Department": "HR", "Role": "Director", "Join Date": "2018-01-10", "Salary": 110000 },
+            { "ID": 5, "Name": "Evan Wright", "Department": "Engineering", "Role": "QA Tester", "Join Date": "2023-02-05", "Salary": 70000 }
+        ];
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            fileNameDisplay.textContent = file.name;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                
+                // Convert to array of objects
+                const json = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                
+                if (json.length > 0) {
+                    currentData = json;
+                    currentHeaders = Object.keys(json[0]);
+                    sortCol = null;
+                    renderTable();
+                } else {
+                    tableContainer.innerHTML = '<div class="empty-state">The uploaded file is empty.</div>';
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        loadSampleBtn.addEventListener('click', () => {
+            fileNameDisplay.textContent = 'sample_data.xlsx (Generated)';
+            currentData = [...sampleData];
+            currentHeaders = Object.keys(sampleData[0]);
+            sortCol = null;
+            renderTable();
+            fileInput.value = ''; // Reset file input
+        });
+
+        function renderTable() {
+            if (currentData.length === 0) return;
+
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+            
+            // Header row
+            const trHead = document.createElement('tr');
+            currentHeaders.forEach(header => {
+                const th = document.createElement('th');
+                th.textContent = header;
+                
+                if (sortCol === header) {
+                    th.classList.add(sortAsc ? 'sort-asc' : 'sort-desc');
+                }
+
+                th.addEventListener('click', () => handleSort(header));
+                trHead.appendChild(th);
+            });
+            thead.appendChild(trHead);
+
+            // Data rows
+            currentData.forEach(row => {
+                const tr = document.createElement('tr');
+                currentHeaders.forEach(header => {
+                    const td = document.createElement('td');
+                    td.textContent = row[header];
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            
+            tableContainer.innerHTML = '';
+            tableContainer.appendChild(table);
+        }
+
+        function handleSort(header) {
+            if (sortCol === header) {
+                sortAsc = !sortAsc;
+            } else {
+                sortCol = header;
+                sortAsc = true;
+            }
+
+            currentData.sort((a, b) => {
+                let valA = a[header];
+                let valB = b[header];
+
+                // Basic type coercion for sorting
+                if (!isNaN(valA) && !isNaN(valB) && valA !== "" && valB !== "") {
+                    valA = Number(valA);
+                    valB = Number(valB);
+                } else {
+                    valA = String(valA).toLowerCase();
+                    valB = String(valB).toLowerCase();
+                }
+
+                if (valA < valB) return sortAsc ? -1 : 1;
+                if (valA > valB) return sortAsc ? 1 : -1;
+                return 0;
+            });
+
+            renderTable();
+        }
+    </script>
+</body>
+</html>
